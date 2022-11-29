@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation } from 'wouter';
 
 import { SearchLocation, SearchLocationInput } from '~/components';
@@ -8,6 +8,8 @@ import { Texts } from '~/constants';
 import CarousalImage from '~/assets/header-slider-image.png';
 import startIcon from '~/assets/icon-start.svg';
 import destinationIcon from '~/assets/icon-destination.svg';
+import debounce from 'lodash.debounce';
+import { getLocation } from '~/api/operations';
 
 const StartPage = () => {
   const [, setLocation] = useLocation();
@@ -25,6 +27,77 @@ const StartPage = () => {
   const [fromLocationList, setFromLocationList] = useState<Array<Location>>([]);
 
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (fromRef.current) {
+      fromRef.current.focus();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!fromStop) {
+      setFromLocationList([]);
+    }
+    if (!toStop) {
+      setToLocationList([]);
+    }
+  }, [fromStop, toStop, setFromLocationList, setToLocationList]);
+
+  const debouncedFromLocationList = useMemo(() => {
+    return debounce(async () => {
+      try {
+        setLoading(true);
+        const data = await getLocation({ location: fromStop });
+        setFromLocationList(data.locations as Location[]);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    }, 500);
+  }, [fromStop]);
+
+  useEffect(() => {
+    return () => {
+      debouncedFromLocationList.cancel();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (fromStop) {
+      debouncedFromLocationList();
+    }
+  }, []);
+
+  const debouncedToLocationList = useMemo(() => {
+    return debounce(async () => {
+      try {
+        setLoading(true);
+        const data = await getLocation({ location: toStop });
+        setToLocationList(data.locations as Location[]);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    }, 500);
+  }, [toStop]);
+
+  const handleFromStopChange = (event: any) => {
+    setFromStop(event.target.value);
+
+    if (!event.target.value || event.target.value.length < 2) return;
+
+    debouncedFromLocationList();
+  };
+
+  const handleToStopChange = (event: any) => {
+    setToStop(event.target.value);
+
+    if (!event.target.value || event.target.value.length < 2) return;
+
+    debouncedToLocationList();
+  };
 
   return (
     <div className='pt-9'>
@@ -59,7 +132,7 @@ const StartPage = () => {
               ref={fromRef}
               name='from'
               value={fromStop}
-              onChange={() => console.log('from')}
+              onChange={handleFromStopChange}
               placeholder='von : Ort, Haltestelle, Adresse, POI'
               type='search'
               id='from-search'
@@ -83,7 +156,7 @@ const StartPage = () => {
               name='to'
               ref={toRef}
               value={toStop}
-              onChange={() => console.log('to')}
+              onChange={handleToStopChange}
               placeholder='nach : Ort, Haltestelle, Adresse, POI'
               type='search'
               id='to-search'
