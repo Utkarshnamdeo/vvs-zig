@@ -1,14 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation } from 'wouter';
-
-import { SearchLocation, SearchLocationInput } from '~/components';
-import { Location } from '~/types';
-import { Texts } from '~/constants';
+import debounce from 'lodash.debounce';
 
 import CarousalImage from '~/assets/header-slider-image.png';
 import startIcon from '~/assets/icon-start.svg';
 import destinationIcon from '~/assets/icon-destination.svg';
-import debounce from 'lodash.debounce';
+import SwitchIcon from '~/assets/icon-switch.svg';
+import { SearchLocation, SearchLocationInput } from '~/components';
+import { Location } from '~/types';
+import { Texts } from '~/constants';
 import { getLocation } from '~/api/operations';
 
 const StartPage = () => {
@@ -100,74 +100,90 @@ const StartPage = () => {
   };
 
   return (
-    <div className='pt-9'>
-      <h3 className='text-lg leading-normal tracking-normal font-semibold'>
+    <div className='pt-3'>
+      {/* page heading */}
+      <h3 className='text-lg tracking-normal font-semibold'>
         {Texts.startPage.heading}
       </h3>
 
-      <div className='mt-5 flex justify-center'>
-        <aside className='rounded-sm overflow-hidden mx-3 my-0 h-min'>
-          <img src={CarousalImage} alt='carousal image' />
+      <div className='mt-8 flex justify-center flex-wrap-reverse gap-5'>
+        {/* left carousal */}
+        <aside className='rounded-lg overflow-hidden shadow-vendorShadow'>
+          <img
+            src={CarousalImage}
+            alt='carousal image'
+            className='h-full object-cover object-left'
+          />
         </aside>
 
-        <div className='mx-3 my-0 flex p-5 rounded shadow-lg flex-col space-between bg-white'>
-          <h3>{Texts.startPage.searchCardTitle}</h3>
+        {/* address search card */}
+        <div className='flex flex-col space-between px-ten py-5 rounded-lg shadow-vendorShadow bg-white'>
+          <h3 className='mt-ten px-ten font-semibold text-xl leading-6'>
+            {Texts.startPage.searchCardTitle}
+          </h3>
 
-          <p>
+          <p className='py-1 px-ten font-semibold text-slate-500'>
             <sub>{Texts.startPage.searchCardSubtitle}</sub>
           </p>
 
-          <SearchLocation
-            className='mt-7'
-            locations={fromLocationList}
-            getLocationId={(location: Location) => {
-              setFromStop(location.disassembledName || location.name);
-              setFromLocationList([]);
-              setFromLocation(location);
-            }}
-            loading={loading}
-            icon={startIcon}
-          >
-            <SearchLocationInput
-              ref={fromRef}
-              name='from'
-              value={fromStop}
-              onChange={handleFromStopChange}
-              placeholder='von : Ort, Haltestelle, Adresse, POI'
-              type='search'
-              id='from-search'
-              required
-            />
-          </SearchLocation>
+          <div className='relative'>
+            {/* start stop field */}
+            <SearchLocation
+              locations={fromLocationList}
+              getLocationId={(location: Location) => {
+                setFromStop(location.disassembledName || location.name);
+                setFromLocationList([]);
+                setFromLocation(location);
+              }}
+              loading={loading}
+              icon={startIcon}
+            >
+              <SearchLocationInput
+                ref={fromRef}
+                name='from'
+                value={fromStop}
+                onChange={handleFromStopChange}
+                placeholder='von : Ort, Haltestelle, Adresse, POI'
+                type='search'
+                id='from-search'
+                required
+              />
+            </SearchLocation>
 
-          <div className='mt-2 mx-5 border-solid border-b-2 border-slate-300' />
+            {/* destination stop field */}
+            <SearchLocation
+              locations={toLocationList}
+              getLocationId={(location: Location) => {
+                setToStop(location.disassembledName || location.name);
+                setToLocationList([]);
+                setToLocation(location);
+              }}
+              loading={loading}
+              icon={destinationIcon}
+              isDestination={true}
+            >
+              <SearchLocationInput
+                name='to'
+                ref={toRef}
+                value={toStop}
+                onChange={handleToStopChange}
+                placeholder='nach : Ort, Haltestelle, Adresse, POI'
+                type='search'
+                id='to-search'
+                required
+              />
+            </SearchLocation>
 
-          <SearchLocation
-            locations={toLocationList}
-            getLocationId={(location: Location) => {
-              setToStop(location.disassembledName || location.name);
-              setToLocationList([]);
-              setToLocation(location);
-            }}
-            loading={loading}
-            icon={destinationIcon}
-          >
-            <SearchLocationInput
-              name='to'
-              ref={toRef}
-              value={toStop}
-              onChange={handleToStopChange}
-              placeholder='nach : Ort, Haltestelle, Adresse, POI'
-              type='search'
-              id='to-search'
-              required
-            />
-          </SearchLocation>
-
-          <div className='mt-2 mx-5 border-solid border-b-2 border-slate-300' />
+            {/* switch button */}
+            <div className='absolute right-0 top-14 cursor-pointer'>
+              <a onClick={() => console.log('switch places')}>
+                <img src={SwitchIcon} alt='switch icon' />
+              </a>
+            </div>
+          </div>
 
           <button
-            className='font-bold mt-7 leading-5 text-center text-white bg-vendorOrange rounded py-3 px-36 disabled:cursor-not-allowed'
+            className='font-semibold mt-7 leading-5 text-center text-white bg-vendorOrange rounded py-3 px-36 disabled:cursor-not-allowed'
             onClick={() =>
               setLocation(`/result/${fromLocation?.id}/${toLocation?.id}`)
             }

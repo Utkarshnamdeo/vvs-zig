@@ -7,7 +7,7 @@ export const Texts = {
   startPage: {
     heading: 'Umwelt und Preisvergleich zwischen VVS und Deinem Auto',
     searchCardTitle: 'Wähle Deine Pendelroute',
-    searchCardSubtitle: 'Um zu sehen, wie viel CO2 Du mit VVS sparen kannst',
+    searchCardSubtitle: 'um zu sehen, wie viel CO2 Du mit VVS sparen kannst',
     searchButtonText: 'Weiter',
   },
 };
