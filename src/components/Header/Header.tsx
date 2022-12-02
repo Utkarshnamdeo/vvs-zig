@@ -2,7 +2,7 @@ import logo from '~/assets/vvs-logo.svg';
 
 export const Header = () => {
   return (
-    <div className='flex items-center justify-between px-6 py-3 sm:p-0 h-full w-full'>
+    <div className='flex items-center justify-between pl-6 pr-2 py-2 h-full w-full'>
       <button
         type='button'
         className='block text-white hover:text-gray-500 focus:outline-none h-full w-8'
