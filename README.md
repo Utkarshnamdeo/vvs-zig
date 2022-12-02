@@ -2,7 +2,7 @@
 
 ## Check the deployed version
 
-VVSZIG [https://vvszig.netlify.app/] (https://vvszig.netlify.app/) Deplyed with netlify
+VVSZIG [https://vvszig.netlify.app/](https://vvszig.netlify.app/) Deplyed with netlify
 
 ## Tools Used
 
