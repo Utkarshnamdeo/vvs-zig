@@ -32,6 +32,10 @@ const StartPage = () => {
     if (fromRef.current) {
       fromRef.current.focus();
     }
+    return () => {
+      debouncedFromLocationList.cancel();
+      debouncedToLocationList.cancel();
+    };
   }, []);
 
   useEffect(() => {
@@ -41,13 +45,13 @@ const StartPage = () => {
     if (!toStop) {
       setToLocationList([]);
     }
-  }, [fromStop, toStop, setFromLocationList, setToLocationList]);
+  }, [fromStop, toStop]);
 
   const debouncedFromLocationList = useMemo(() => {
-    return debounce(async () => {
+    return debounce(async (location: string) => {
       try {
         setLoading(true);
-        const data = await getLocation({ location: fromStop });
+        const data = await getLocation({ location });
         setFromLocationList(data.locations as Location[]);
       } catch (error) {
         console.log(error);
@@ -57,23 +61,11 @@ const StartPage = () => {
     }, 500);
   }, [fromStop]);
 
-  useEffect(() => {
-    return () => {
-      debouncedFromLocationList.cancel();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (fromStop) {
-      debouncedFromLocationList();
-    }
-  }, []);
-
   const debouncedToLocationList = useMemo(() => {
-    return debounce(async () => {
+    return debounce(async (location: string) => {
       try {
         setLoading(true);
-        const data = await getLocation({ location: toStop });
+        const data = await getLocation({ location });
         setToLocationList(data.locations as Location[]);
       } catch (error) {
         console.log(error);
@@ -88,7 +80,7 @@ const StartPage = () => {
 
     if (!event.target.value || event.target.value.length < 2) return;
 
-    debouncedFromLocationList();
+    debouncedFromLocationList(event.target.value);
   };
 
   const handleToStopChange = (event: any) => {
@@ -96,7 +88,7 @@ const StartPage = () => {
 
     if (!event.target.value || event.target.value.length < 2) return;
 
-    debouncedToLocationList();
+    debouncedToLocationList(event.target.value);
   };
 
   return (
