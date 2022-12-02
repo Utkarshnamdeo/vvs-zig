@@ -12,7 +12,7 @@ export const InfoCard = ({
     <div
       className={clsx(
         className,
-        'flex flex-col shadow-lg rounded-lg p-3 m-2 w-40 h-24'
+        'flex flex-col shadow-vendorShadow rounded-lg p-3 m-2 w-40 h-[100px]'
       )}
     >
       {children}

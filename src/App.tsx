@@ -7,7 +7,7 @@ import { Texts } from '~/constants';
 export default function App() {
   return (
     <div className='h-screen'>
-      <header className='flex justify-between sm:items-center sm:p-5 bg-vendorOrange h-[78px]'>
+      <header className='flex justify-between sm:items-center bg-vendorOrange h-[78px]'>
         <Header />
       </header>
       <main className='h-[calc(100%-78px)] lg:h-[calc(100%-78px)] mx-auto sm:px-7 px-2'>

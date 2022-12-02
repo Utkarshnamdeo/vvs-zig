@@ -45,14 +45,14 @@ export const SearchLocation = ({
 
           {/* trailing line from start -> to destination */}
           {!isDestination && (
-            <div className='w-[1px] border-[0.5px] h-7 border-dashed border-[#979797] absolute top-5 left-[21px]'></div>
+            <div className='w-[1px] border-[1px] h-7 border-dashed border-[#979797] absolute top-5 left-[21px]'></div>
           )}
         </div>
         {children}
 
         {/* Location list after search */}
         {locations.length > 0 && (
-          <ul className='absolute border-[1px] border-solid	border-slate-300 rounded bg-white p-3 z-10 max-h-60 overflow-scroll shadow-lg w-full top-5'>
+          <ul className='absolute border-[1px] border-solid	border-slate-300 rounded bg-white p-3 z-10 max-h-60 overflow-scroll shadow-vendorShadow w-full top-5'>
             {locations.map((location) => (
               <li
                 key={location.id}
