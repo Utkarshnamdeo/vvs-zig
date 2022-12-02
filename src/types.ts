@@ -23,8 +23,8 @@ export interface Location {
   properties: { stopId: string };
 }
 
-export interface Journey {
-  id: 'car' | 'train';
+export interface Trip {
+  legMode: 'car' | 'train';
   carbonEmission: number;
   distance: number;
 }
