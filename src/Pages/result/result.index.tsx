@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { InfoCard } from '~/components';
-import { Trip } from '~/types';
+import { LegMode, Trip } from '~/types';
 import { getTrips } from '~/api/operations';
 
 import CarIcon from '~/assets/car-icon.svg';
@@ -14,6 +14,31 @@ const getEmission = (leg: Record<string, any>) => {
     .sort() // sorting alphabetically to make sure that the key is always the same
     .find((key) => key.toLowerCase().includes('actual')) as string;
   return Number(leg.properties[key].split('-')[0].trim());
+};
+
+const calculateTrips = ({
+  legs,
+  legMode,
+}: {
+  legs: Array<Record<string, any>>;
+  legMode: LegMode;
+}): Trip => {
+  const mappedLegs = legs.map((leg) => {
+    return { carbonEmission: getEmission(leg), distance: leg.distance };
+  });
+
+  const carbonEmission = mappedLegs.reduce(
+    (acc, curr) => curr.carbonEmission + acc,
+    0
+  );
+
+  const distance = mappedLegs.reduce((acc, curr) => curr.distance + acc, 0);
+
+  return {
+    carbonEmission: `${carbonEmission.toFixed(2)} kg`,
+    distance: `${(distance / 1000).toFixed(2).replace('.', ',')} km`,
+    legMode,
+  };
 };
 
 const useTrips = (from: string, to: string) => {
@@ -52,35 +77,20 @@ const ResultPage = ({ params }: { params: { from: string; to: string } }) => {
     error,
   } = useTrips(params.from, params.to);
 
-  const carTrip = useMemo(() => {
-    if (car) {
-      return {
-        carbonEmission: car.legs
-          .map((leg: Record<string, any>) => getEmission(leg))
-          .reduce((acc: number, curr: number) => curr + acc, 0),
+  const carTrip = useMemo(
+    () => car?.legs && calculateTrips({ legs: car.legs, legMode: LegMode.CAR }),
+    [car?.legs]
+  );
 
-        distance: car.legs
-          .map((leg: Record<string, any>) => leg.distance)
-          .reduce((acc: number, curr: number) => acc + curr, 0),
-        legMode: 'car',
-      } as Trip;
-    }
-  }, [car]);
-
-  const trainTrip = useMemo(() => {
-    if (train) {
-      return {
-        carbonEmission: train.legs
-          .map((leg: Record<string, any>) => getEmission(leg))
-          .reduce((acc: number, curr: number) => curr + acc, 0),
-
-        distance: train.legs
-          .map((leg: Record<string, any>) => leg.distance)
-          .reduce((acc: number, curr: number) => acc + curr, 0),
-        legMode: 'train',
-      } as Trip;
-    }
-  }, [train]);
+  const trainTrip = useMemo(
+    () =>
+      train?.legs &&
+      calculateTrips({
+        legs: train.legs,
+        legMode: LegMode.TRAIN,
+      }),
+    [train?.legs]
+  );
 
   return (
     <div className='pt-9'>
@@ -92,17 +102,13 @@ const ResultPage = ({ params }: { params: { from: string; to: string } }) => {
           <div className='py-2 px-20 text-center'>
             <img src={CarIcon} alt='car' className='text-sm' />
             <p className='text-sm font-normal'>
-              {carTrip?.distance &&
-                (carTrip.distance / 1000).toFixed(2).replace('.', ',')}{' '}
-              km
+              {carTrip?.distance && carTrip.distance}
             </p>
           </div>
           <div className='py-2 px-20 text-center'>
             <img src={BusIcon} alt='bus' className='text-sm' />
             <p className='text-sm font-normal'>
-              {trainTrip?.distance &&
-                (trainTrip.distance / 1000).toFixed(2).replace('.', ',')}{' '}
-              km
+              {trainTrip?.distance && trainTrip.distance}
             </p>
           </div>
         </div>
@@ -116,7 +122,7 @@ const ResultPage = ({ params }: { params: { from: string; to: string } }) => {
               <p className='text-sm font-semibold'>Auto</p>
             </div>
             <p className='mt-2 text-xl font-bold'>
-              {carTrip?.carbonEmission && carTrip.carbonEmission.toFixed(2)} kg
+              {carTrip?.carbonEmission && carTrip.carbonEmission}
             </p>
             <p className='text-xs'>CO2 / Jahr</p>
           </InfoCard>
@@ -127,8 +133,7 @@ const ResultPage = ({ params }: { params: { from: string; to: string } }) => {
               <p className='text-sm font-semibold'>VVS Abo</p>
             </div>
             <p className='mt-2 text-xl font-bold'>
-              {trainTrip?.carbonEmission && trainTrip.carbonEmission.toFixed(2)}{' '}
-              kg
+              {trainTrip?.carbonEmission && trainTrip.carbonEmission}
             </p>
             <p className='text-xs'>CO2 / Jahr</p>
           </InfoCard>

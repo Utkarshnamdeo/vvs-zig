@@ -23,8 +23,13 @@ export interface Location {
   properties: { stopId: string };
 }
 
+export enum LegMode {
+  CAR = 'car',
+  TRAIN = 'train',
+}
+
 export interface Trip {
-  legMode: 'car' | 'train';
-  carbonEmission: number;
-  distance: number;
+  legMode: LegMode;
+  carbonEmission: string;
+  distance: string;
 }
