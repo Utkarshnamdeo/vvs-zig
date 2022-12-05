@@ -27,6 +27,8 @@ module.exports = {
     // Add your own rules here to override ones from the extended configs.
     'react/react-in-jsx-scope': 0,
     'react/jsx-uses-react': 0,
-    'react/exhaustive-deps': 1,
+    'react/exhaustive-deps': 0,
+    'import/no-unresolved': 0,
+    'no-undef': 0,
   },
 };

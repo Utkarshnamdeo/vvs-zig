@@ -3,28 +3,29 @@ import { useEffect, useMemo, useState } from 'react';
 import { InfoCard } from '~/components';
 import { LegMode, Trip } from '~/types';
 import { getTrips } from '~/api/operations';
+import { Texts } from '~/constants';
 
 import CarIcon from '~/assets/car-icon.svg';
 import BusIcon from '~/assets/bus-icon.svg';
 import AutoIcon from '~/assets/auto-icon.svg';
 import VVSLogo from '~/assets/vvs-logo.svg';
 
-const getEmission = (leg: Record<string, any>) => {
+const getEmission = (leg: Record<string, number | Record<string, string>>) => {
   const key = Object.keys(leg.properties)
     .sort() // sorting alphabetically to make sure that the key is always the same
     .find((key) => key.toLowerCase().includes('actual')) as string;
-  return Number(leg.properties[key].split('-')[0].trim());
+  return Number((leg.properties as Record<string, string>)[key].split('-')[0].trim());
 };
 
 const calculateTrips = ({
   legs,
   legMode,
 }: {
-  legs: Array<Record<string, any>>;
+  legs: Array<Record<string, number | Record<string, string>>>;
   legMode: LegMode;
 }): Trip => {
   const mappedLegs = legs.map((leg) => {
-    return { carbonEmission: getEmission(leg), distance: leg.distance };
+    return { carbonEmission: getEmission(leg), distance: leg.distance as number };
   });
 
   const carbonEmission = mappedLegs.reduce(

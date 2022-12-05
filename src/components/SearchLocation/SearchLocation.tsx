@@ -23,7 +23,7 @@ const getLocationIcon = (type: LocationType) => {
 export const SearchLocation = ({
   children,
   locations,
-  getLocationId,
+  setLocationId,
   loading,
   icon,
   className,
@@ -31,9 +31,9 @@ export const SearchLocation = ({
 }: {
   children: ReactNode;
   locations: Location[];
-  getLocationId: (location: Location) => void;
+  setLocationId: (location: Location) => void;
   loading: boolean;
-  icon?: any;
+  icon?: string;
   className?: string;
   isDestination?: boolean;
 }) => {
@@ -41,6 +41,7 @@ export const SearchLocation = ({
     <div className={clsx(className, 'mt-6')}>
       <div className='relative -mx-3'>
         <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
+          {/* source or destination icon */}
           <img src={icon} alt='start' className='w-5 h-5' />
 
           {/* trailing line from start -> to destination */}
@@ -58,9 +59,9 @@ export const SearchLocation = ({
                 key={location.id}
                 className='border-b-[1px] border-solid border-slate-300 pt-4 pb-2'
               >
-                <a
+                <button
                   className='block cursor-pointer'
-                  onClick={() => getLocationId(location)}
+                  onClick={() => setLocationId(location)}
                 >
                   <div className='flex items-start'>
                     <div className='flex-shrink-0 h-5 w-5 mr-2'>
@@ -80,7 +81,7 @@ export const SearchLocation = ({
                       </span>
                     </div>
                   </div>
-                </a>
+                </button>
               </li>
             ))}
           </ul>
