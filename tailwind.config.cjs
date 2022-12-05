@@ -15,6 +15,14 @@ module.exports = {
       margin: {
         ten: '10px',
       },
+      fontFamily: { 
+        'cs-b': 'CircularStd-Bold',
+        'cs-m': 'CircularStd-Medium',
+        'cs-r': 'CircularStd-Book',
+      },
+      textColor: {
+        sub: '#666'
+      }
     },
   },
   plugins: [],
