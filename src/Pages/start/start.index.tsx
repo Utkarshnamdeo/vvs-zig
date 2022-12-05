@@ -6,16 +6,17 @@ import CarousalImage from '~/assets/header-slider-image.png';
 import startIcon from '~/assets/icon-start.svg';
 import destinationIcon from '~/assets/icon-destination.svg';
 import SwitchIcon from '~/assets/icon-switch.svg';
+
 import { SearchLocation, SearchLocationInput } from '~/components';
 import { Location } from '~/types';
 import { Texts } from '~/constants';
 import { getLocation } from '~/api/operations';
 
+
 const StartPage = () => {
   const [, setLocation] = useLocation();
 
   const fromRef = useRef<HTMLInputElement>(null);
-  const toRef = useRef<HTMLInputElement>(null);
 
   const [fromLocation, setFromLocation] = useState<Location | null>(null);
   const [toLocation, setToLocation] = useState<Location | null>(null);
@@ -59,7 +60,7 @@ const StartPage = () => {
         setLoading(false);
       }
     }, 500);
-  }, [fromStop]);
+  }, []);
 
   const debouncedToLocationList = useMemo(() => {
     return debounce(async (location: string) => {
@@ -73,9 +74,9 @@ const StartPage = () => {
         setLoading(false);
       }
     }, 500);
-  }, [toStop]);
+  }, []);
 
-  const handleFromStopChange = (event: any) => {
+  const handleFromStopChange = (event: { target: { value: string } }) => {
     setFromStop(event.target.value);
 
     if (!event.target.value || event.target.value.length < 2) return;
@@ -83,7 +84,7 @@ const StartPage = () => {
     debouncedFromLocationList(event.target.value);
   };
 
-  const handleToStopChange = (event: any) => {
+  const handleToStopChange = (event: { target: { value: string } }) => {
     setToStop(event.target.value);
 
     if (!event.target.value || event.target.value.length < 2) return;
@@ -94,7 +95,7 @@ const StartPage = () => {
   return (
     <div className='pt-3'>
       {/* page heading */}
-      <h3 className='text-lg tracking-normal font-semibold'>
+      <h3 className='text-lg'>
         {Texts.startPage.heading}
       </h3>
 
@@ -103,7 +104,7 @@ const StartPage = () => {
         <aside className='rounded-lg overflow-hidden shadow-vendorShadow'>
           <img
             src={CarousalImage}
-            alt='carousal image'
+            alt='carousal'
             className='h-full object-cover object-left'
           />
         </aside>
@@ -114,7 +115,7 @@ const StartPage = () => {
             {Texts.startPage.searchCardTitle}
           </h3>
 
-          <p className='py-1 px-ten font-semibold text-slate-500'>
+          <p className='py-1 px-ten text-sub'>
             <sub>{Texts.startPage.searchCardSubtitle}</sub>
           </p>
 
@@ -122,7 +123,7 @@ const StartPage = () => {
             {/* start stop field */}
             <SearchLocation
               locations={fromLocationList}
-              getLocationId={(location: Location) => {
+              setLocationId={(location: Location) => {
                 setFromStop(location.disassembledName || location.name);
                 setFromLocationList([]);
                 setFromLocation(location);
@@ -145,7 +146,7 @@ const StartPage = () => {
             {/* destination stop field */}
             <SearchLocation
               locations={toLocationList}
-              getLocationId={(location: Location) => {
+              setLocationId={(location: Location) => {
                 setToStop(location.disassembledName || location.name);
                 setToLocationList([]);
                 setToLocation(location);
@@ -156,7 +157,7 @@ const StartPage = () => {
             >
               <SearchLocationInput
                 name='to'
-                ref={toRef}
+                // ref={toRef}
                 value={toStop}
                 onChange={handleToStopChange}
                 placeholder='nach : Ort, Haltestelle, Adresse, POI'
@@ -168,14 +169,14 @@ const StartPage = () => {
 
             {/* switch button */}
             <div className='absolute right-0 top-14 cursor-pointer'>
-              <a onClick={() => console.log('switch places')}>
+              <button onClick={() => console.log('switch places')}>
                 <img src={SwitchIcon} alt='switch icon' />
-              </a>
+              </button>
             </div>
           </div>
 
           <button
-            className='font-semibold mt-7 leading-5 text-center text-white bg-vendorOrange rounded py-3 px-36 disabled:cursor-not-allowed'
+            className='font-cs-b mt-7 leading-5 text-center text-white bg-vendorOrange rounded py-3 px-36 disabled:cursor-not-allowed'
             onClick={() =>
               setLocation(`/result/${fromLocation?.id}/${toLocation?.id}`)
             }
