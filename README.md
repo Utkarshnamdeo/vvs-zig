@@ -6,10 +6,10 @@ VVSZIG [https://vvszig.netlify.app/](https://vvszig.netlify.app/) Deplyed with n
 
 ## Tools Used
 
-React [https://reactjs.org/](https://reactjs.org/) Frontend Framework for JSX
-Vite [https://vitejs.dev/](https://vitejs.dev/) Frontend Tooling
-Tailwind [https://tailwindcss.com/](https://tailwindcss.com/) CSS framework
-Wouter [https://github.com/molefrog/wouter](https://github.com/molefrog/wouter) Frontend routes
+- React [https://reactjs.org/](https://reactjs.org/) Frontend Framework for JSX
+- Vite [https://vitejs.dev/](https://vitejs.dev/) Frontend Tooling
+- Tailwind [https://tailwindcss.com/](https://tailwindcss.com/) CSS framework
+- Wouter [https://github.com/molefrog/wouter](https://github.com/molefrog/wouter) Frontend routes
 
 ## Available Scripts
 
