@@ -17,7 +17,7 @@ export default function App() {
             {Texts.app.breadCrumbResult}
           </p>
         </div>
-        <h1 className='text-5xl tracking-normal font-bold h-14'>
+        <h1 className='text-5xl tracking-normal font-bold h-14 font-cs-b'>
           {Texts.app.heading}
         </h1>
         <Router>

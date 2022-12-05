@@ -115,16 +115,22 @@ const ResultPage = ({ params }: { params: { from: string; to: string } }) => {
       </section>
 
       <section className='mt-5 flex justify-center flex-wrap lg:flex-nowrap '>
+
+        {/* Car card */}
+        <div className=''>
+        <h2 className='font-cs-b px-3 py-5'>
+          {Texts.resultPage.emissionCardTitle}
+        </h2>
         <div className='flex space-between'>
           <InfoCard className='bg-white'>
             <div className='flex align-middle justify-start'>
               <img src={AutoIcon} alt='car' className='text-sm mr-[6px]' />
               <p className='text-sm font-semibold'>Auto</p>
             </div>
-            <p className='mt-2 text-xl font-bold'>
+            <p className='mt-2 text-xl font-bold font-cs-b'>
               {carTrip?.carbonEmission && carTrip.carbonEmission}
             </p>
-            <p className='text-xs'>CO2 / Jahr</p>
+            <p className='text-xs text-sub'>CO2 / Jahr</p>
           </InfoCard>
 
           <InfoCard className='bg-vendorOrange text-white'>
@@ -132,16 +138,24 @@ const ResultPage = ({ params }: { params: { from: string; to: string } }) => {
               <img src={VVSLogo} alt='vvs-logo' className='text-sm mr-[6px]' />
               <p className='text-sm font-semibold'>VVS Abo</p>
             </div>
-            <p className='mt-2 text-xl font-bold'>
+            <p className='mt-2 text-xl font-bold font-cs-b'>
               {trainTrip?.carbonEmission && trainTrip.carbonEmission}
             </p>
             <p className='text-xs'>CO2 / Jahr</p>
           </InfoCard>
         </div>
+        </div>
+
+        {/* Train card */}
+        <div className=''>
+          <h2 className='font-cs-b px-3 py-5'>
+            {Texts.resultPage.costCardTitle}
+          </h2>
         <div className='flex space-between'>
           <InfoCard className='bg-white' />
 
           <InfoCard className='bg-vendorOrange text-white' />
+        </div>
         </div>
       </section>
     </div>
