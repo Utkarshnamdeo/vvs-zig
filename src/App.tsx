@@ -13,7 +13,7 @@ export default function App() {
       <main className='h-[calc(100%-78px)] lg:h-[calc(100%-78px)] mx-auto sm:px-7 px-2'>
         <div className='py-5'>
           <p className='text-xs leading-6 tracking-normal font-semibold'>
-            <Link to='/'> {Texts.app.breadCrumbStart}</Link> /{' '}
+            <Link to={'/'}> <a href='/'>{Texts.app.breadCrumbStart}</a> </Link> / {' '}
             {Texts.app.breadCrumbResult}
           </p>
         </div>
